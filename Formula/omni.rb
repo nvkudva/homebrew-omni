@@ -13,12 +13,14 @@ class Omni < Formula
   depends_on "uv"
 
   def install
-    venv = virtualenv_create(libexec, "python3.12")
+    python = Formula["python@3.12"].opt_bin/"python3.12"
+    venv = libexec/"venv"
+    system python, "-m", "venv", venv
     # uv reads the project's [tool.uv.sources]: the git-pinned diffusers and ltx
     # packages and the spaCy wheel URL live there, not on PyPI.
-    system "uv", "pip", "install", "--python", venv.root/"bin"/"python",
+    system "uv", "pip", "install", "--python", venv/"bin"/"python",
                   "--no-cache", "--quiet", buildpath
-    bin.install_symlink libexec/"bin"/"omni"
+    bin.install_symlink venv/"bin"/"omni"
   end
 
   def caveats

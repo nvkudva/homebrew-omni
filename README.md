@@ -4,6 +4,7 @@ Homebrew tap for [omni](https://github.com/nvkudva/omni-api): every local model 
 
 ```sh
 brew tap nvkudva/omni
+brew trust nvkudva/omni      # Homebrew 7+ refuses untrusted third-party taps
 brew install omni
 ```
 
