@@ -11,6 +11,9 @@ class Omni < Formula
   depends_on arch: :arm64
   depends_on "python@3.12"
   depends_on "uv"
+  # Rust wheels inside the venv carry @rpath dylib IDs without header padding;
+  # Homebrew's relocation would try to rewrite them and fail mid-keg.
+  preserve_rpath
 
   def install
     python = Formula["python@3.12"].opt_bin/"python3.12"
