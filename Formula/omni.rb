@@ -1,8 +1,8 @@
 class Omni < Formula
   desc "One local gateway for chat, decide, embeddings, speech and video"
   homepage "https://github.com/nvkudva/omni-api"
-  url "https://github.com/nvkudva/omni-api/archive/refs/tags/v0.1.0.tar.gz"
-  sha256 "3eb829b3c494f4924e3aa7fbbf21bce6cdfbd73ae25da48d3c11dedc963817a9"
+  url "https://github.com/nvkudva/omni-api/archive/refs/tags/v0.2.0.tar.gz"
+  sha256 "e747298f7354a9f6ddb1ba8f9ad1bb000e1e13294bf19e00a1823170e3f6b40f"
   license "MIT"
   head "https://github.com/nvkudva/omni-api.git", branch: "main"
 
@@ -22,7 +22,7 @@ class Omni < Formula
     # uv reads the project's [tool.uv.sources]: the git-pinned diffusers and ltx
     # packages and the spaCy wheel URL live there, not on PyPI.
     system "uv", "pip", "install", "--python", venv/"bin"/"python",
-                  "--no-cache", "--quiet", buildpath
+                  "--no-cache", "--quiet", "#{buildpath}[media]"
     bin.install_symlink venv/"bin"/"omni"
   end
 
