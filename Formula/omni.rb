@@ -7,8 +7,8 @@ class Omni < Formula
   head "https://github.com/nvkudva/omni-api.git", branch: "main"
 
   # MLX ships arm64-only wheels, so the media roles need Apple Silicon.
-  depends_on :macos
   depends_on arch: :arm64
+  depends_on :macos
   depends_on "python@3.12"
   depends_on "uv"
   # Rust wheels inside the venv carry @rpath dylib IDs without header padding;
@@ -16,7 +16,7 @@ class Omni < Formula
   preserve_rpath
 
   def install
-    python = Formula["python@3.12"].opt_bin/"python3.12"
+    python = formula_opt_bin("python@3.12")/"python3.12"
     venv = libexec/"venv"
     system python, "-m", "venv", venv
     # uv reads the project's [tool.uv.sources]: the git-pinned diffusers and ltx
