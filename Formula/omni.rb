@@ -1,8 +1,8 @@
 class Omni < Formula
   desc "One local gateway for chat, decide, embeddings, speech and video"
   homepage "https://github.com/nvkudva/omni-api"
-  url "https://github.com/nvkudva/omni-api/archive/refs/tags/v0.5.1.tar.gz"
-  sha256 "cb191ca7453ce4027d0fa478d44b227ffa954c971c26cdfa3a737cae2f283f0d"
+  url "https://github.com/nvkudva/omni-api/archive/refs/tags/v0.7.0.tar.gz"
+  sha256 "569ee753b54bbe0bd83e07ec8bb7f00c12ebc3f8b078456241d94ca43519038a"
   license "MIT"
   head "https://github.com/nvkudva/omni-api.git", branch: "main"
 
