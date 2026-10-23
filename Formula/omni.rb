@@ -55,9 +55,11 @@ class Omni < Formula
 
   def caveats
     <<~EOS
-      Models are not downloaded at install time:
-        omni init     # install Ollama and pull the chat, decide and embed models
-        omni up       # start the gateway on http://127.0.0.1:10000/
+      The omni command is installed. Models are not downloaded by Homebrew; run this once:
+        omni init     # installs Ollama if missing, then downloads chat, decide, embed,
+                      # speech-to-text and text-to-speech (several GB) and starts omni
+      Image and video models are tens of GB: they download on first use, or `omni init --media`.
+      Later: omni up / omni down / omni status, then open http://127.0.0.1:10000/
     EOS
   end
 
