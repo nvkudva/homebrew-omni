@@ -19,11 +19,38 @@ class Omni < Formula
     python = formula_opt_bin("python@3.12")/"python3.12"
     venv = libexec/"venv"
     system python, "-m", "venv", venv
-    # uv reads the project's [tool.uv.sources]: the git-pinned diffusers and ltx
-    # packages and the spaCy wheel URL live there, not on PyPI.
-    system "uv", "pip", "install", "--python", venv/"bin"/"python",
-                  "--no-cache", "--quiet", "#{buildpath}[media]"
+    install_packages(venv)
     bin.install_symlink venv/"bin"/"omni"
+  end
+
+  # uv reads the project's [tool.uv.sources]: the git-pinned diffusers and ltx
+  # packages and the spaCy wheel URL live there, not on PyPI.
+  #
+  # `system` hides a command's output in a log file, so a multi-GB install looks
+  # frozen. Run uv ourselves and relay its step lines to the terminal instead.
+  def install_packages(venv)
+    # Wheels are cached under Homebrew's own cache dir (writable inside the build
+    # sandbox), so a reinstall or upgrade skips the multi-GB download. On APFS uv
+    # clones files out of the cache (copy-on-write), so Homebrew's relocation can
+    # never edit a cached file in place.
+    ENV["UV_CACHE_DIR"] = (HOMEBREW_CACHE/"uv").to_s
+    # torch wheels are large; uv's 30s default read timeout fails on slow links.
+    ENV["UV_HTTP_TIMEOUT"] = "120"
+
+    ohai "Installing the media stack (MLX, torch, diffusers, spaCy)"
+    puts "  First install downloads about 1.5 GB and takes a few minutes; reinstalls reuse #{ENV["UV_CACHE_DIR"]}."
+
+    command = ["uv", "pip", "install", "--python", (venv/"bin"/"python").to_s, "#{buildpath}[media]"]
+    output = []
+    IO.popen([*command, { err: [:child, :out] }]) do |uv|
+      uv.each_line do |line|
+        output << line
+        puts "  #{line}" unless line.start_with?(" + ")
+      end
+    end
+    return if Process.last_status.success?
+
+    odie "uv pip install failed:\n#{output.last(20).join}"
   end
 
   def caveats
