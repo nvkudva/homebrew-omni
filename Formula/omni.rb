@@ -1,12 +1,12 @@
 class Omni < Formula
   desc "One local gateway for chat, decide, embeddings, speech and video"
   homepage "https://github.com/nvkudva/omni-api"
-  url "https://github.com/nvkudva/omni-api/archive/refs/tags/v0.8.3.tar.gz"
-  sha256 "cfc8db7071266f0fd6ed803d939a652e0934c76bfcfcf68f9a8d20ca9d9a2069"
+  url "https://github.com/nvkudva/omni-api/archive/refs/tags/v0.8.4.tar.gz"
+  sha256 "0bc9f40688cdb4b663e16740cbd949e4e4af2577770648ba2beaa597510a7e5c"
   license "MIT"
   head "https://github.com/nvkudva/omni-api.git", branch: "main"
 
-  # MLX ships arm64-only wheels, so the media roles need Apple Silicon.
+  # torch ships arm64-only Metal wheels, so the media roles need Apple Silicon.
   depends_on arch: :arm64
   depends_on :macos
   depends_on "python@3.12"
@@ -23,8 +23,8 @@ class Omni < Formula
     bin.install_symlink venv/"bin"/"omni"
   end
 
-  # uv reads the project's [tool.uv.sources]: the git-pinned diffusers and ltx
-  # packages and the spaCy wheel URL live there, not on PyPI.
+  # uv reads the project's [tool.uv.sources]: the git-pinned diffusers and the
+  # spaCy wheel URL live there, not on PyPI.
   #
   # `system` hides a command's output in a log file, so a multi-GB install looks
   # frozen. Run uv ourselves and relay its step lines to the terminal instead.
@@ -37,8 +37,8 @@ class Omni < Formula
     # torch wheels are large; uv's 30s default read timeout fails on slow links.
     ENV["UV_HTTP_TIMEOUT"] = "120"
 
-    ohai "Installing the media stack (MLX, torch, diffusers, spaCy)"
-    puts "  First install downloads about 1.5 GB and takes a few minutes; reinstalls reuse #{ENV["UV_CACHE_DIR"]}."
+    ohai "Installing the media stack (torch, diffusers, ONNX Runtime, spaCy)"
+    puts "  First install downloads several GB and takes a few minutes; reinstalls reuse #{ENV["UV_CACHE_DIR"]}."
 
     command = ["uv", "pip", "install", "--python", (venv/"bin"/"python").to_s, "#{buildpath}[media]"]
     output = []

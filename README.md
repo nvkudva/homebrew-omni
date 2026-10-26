@@ -8,21 +8,21 @@ brew trust nvkudva/omni      # Homebrew 7+ refuses untrusted third-party taps
 brew install omni
 ```
 
-Requires macOS on Apple Silicon (MLX has no Linux or Intel-Mac build).
+Requires macOS on Apple Silicon (torch's Metal backend is arm64-only).
 
 Then:
 
 ```sh
-omni init     # install Ollama if missing, pull the chat, decide and embed models
+omni init     # install Ollama if missing, pull the chat, decide, embed and speech models
 omni up       # gateway and workers in the background
 omni status
 ```
 
-The stt, tts, image and video models download on first use.
+Image and video models download on first use.
 
 ## What the formula does
 
-It unpacks the release tarball, creates a virtualenv in the Cellar with `python@3.12`, and runs `uv pip install` against that source tree. uv is what applies `[tool.uv.sources]` from the project, which pins the git revisions of `diffusers` and the ltx packages plus the spaCy wheel URL. Those are not installable from PyPI, so a plain `resource`-stanza formula cannot express this package yet.
+It unpacks the release tarball, creates a virtualenv in the Cellar with `python@3.12`, and runs `uv pip install` against that source tree. uv is what applies `[tool.uv.sources]` from the project, which pins the git revision of `diffusers` plus the spaCy wheel URL. Those are not installable from PyPI, so a plain `resource`-stanza formula cannot express this package yet.
 
 `omni init` is not run at install time — it pulls several GB of models.
 
@@ -33,7 +33,7 @@ It unpacks the release tarball, creates a virtualenv in the Cellar with `python@
 Manual path:
 
 ```sh
-tag=v0.2.0
+tag=v0.8.4
 url="https://github.com/nvkudva/omni-api/archive/refs/tags/$tag.tar.gz"
 sha=$(curl -fsSL "$url" | shasum -a 256 | cut -d' ' -f1)
 ```
