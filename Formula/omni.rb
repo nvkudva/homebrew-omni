@@ -9,6 +9,7 @@ class Omni < Formula
   # torch ships arm64-only Metal wheels, so the media roles need Apple Silicon.
   depends_on arch: :arm64
   depends_on :macos
+  depends_on "ffmpeg"
   depends_on "python@3.12"
   depends_on "uv"
   # Rust wheels inside the venv carry @rpath dylib IDs without header padding;
